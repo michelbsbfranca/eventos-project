@@ -24,7 +24,7 @@
         @if($search)
             <h3 class="text-center mb-4">Resultados para: "{{ $search }}"</h3>
         @else
-            <h3 class="text-center mb-4">Próximos Eventos</h3>
+            <h3 class="text-center mb-4">Eventos agendados</h3>
         @endif   
 
         <div id="cards-container" class="row g-4">

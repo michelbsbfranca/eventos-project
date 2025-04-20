@@ -3,19 +3,21 @@ FROM php:8.2-apache
 # Instala extensões PHP necessárias
 RUN apt-get update && apt-get install -y \
     git unzip zip curl libpng-dev libonig-dev libxml2-dev libzip-dev \
-    && docker-php-ext-install pdo pdo_mysql zip
+    && docker-php-ext-install pdo pdo_mysql zip gd mbstring exif pcntl bcmath
 
-# Ativa o mod_rewrite do Apache (essencial para Laravel)
+# Ativa o mod_rewrite do Apache
 RUN a2enmod rewrite
+
+# Configura o DocumentRoot do Apache
+ENV APACHE_DOCUMENT_ROOT /var/www/html/public
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
+RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
 # Define o diretório de trabalho
 WORKDIR /var/www/html
 
 # Instala Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-# Copia arquivos (será sobrescrito por volume)
-COPY ./src /var/www/html
 
 # Permissões para Laravel
 RUN chown -R www-data:www-data /var/www/html \

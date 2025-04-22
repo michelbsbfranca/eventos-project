@@ -22,3 +22,13 @@ Route::get('/events/create',[EventController::class, 'create']);
 Route::post('/events',[EventController::class, 'store']);
 Route::delete('/events/{id}',[EventController::class, 'delete']);
 Route::get('/events/{id}',[EventController::class, 'show']);
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+});

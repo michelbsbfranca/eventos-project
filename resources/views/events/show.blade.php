@@ -15,7 +15,7 @@
                 <p class="event-city"><ion-icon name="calendar-outline"></ion-icon> {{ date('d/m/y', strtotime($event->date)) }}</p>
               <p class="event-city"><ion-icon name="location-outline"></ion-icon> {{ $event->city }}</p>
               <p class="event-participants"><ion-icon name="people-outline"></ion-icon> X Participantes</p>
-              <p class="event-owner"><ion-icon name="star-outline"></ion-icon> Dono do evento</p>
+              <p class="event-owner"><ion-icon name="star-outline"></ion-icon> {{ $eventOwner['name'] }}</p>
             <h3> Incluso no evento :</h3>
               @foreach ($event->items as $item )
                     <p class="event-items"><ion-icon name="checkmark-outline"></ion-icon> {{ $item }}</p>                    

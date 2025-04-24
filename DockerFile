@@ -5,20 +5,51 @@ RUN apt-get update && apt-get install -y \
     git unzip zip curl libpng-dev libonig-dev libxml2-dev libzip-dev \
     && docker-php-ext-install pdo pdo_mysql zip gd mbstring exif pcntl bcmath
 
-# Ativa o mod_rewrite do Apache
+# Ativa mod_rewrite do Apache
 RUN a2enmod rewrite
 
-# Configura o DocumentRoot do Apache
-ENV APACHE_DOCUMENT_ROOT /var/www/html/public
+# Configura o DocumentRoot
+ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
-# Define o diretório de trabalho
+# Define diretório de trabalho
 WORKDIR /var/www/html
 
 # Instala Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Instala Node.js e npm
+RUN apt-get update && apt-get install -y curl gnupg ca-certificates \
+    && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs
+
+# Copia arquivos do projeto Laravel
+COPY . .
+
+# Instala dependências do PHP e Laravel Fortify
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader \
+    && composer require laravel/fortify \
+    && php artisan vendor:publish --provider="Laravel\Fortify\FortifyServiceProvider" --force \
+    && composer dump-autoload \
+    && php artisan config:clear \
+    && php artisan cache:clear \
+    && php artisan optimize:clear
+
+# Instala dependências do Node/Vite
+RUN npm install
+
 # Permissões para Laravel
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html
+
+# Permissões para diretórios de cache e storage
+RUN chown -R www-data:www-data /var/www/html/storage \
+    && chmod -R 775 /var/www/html/storage \
+    && chown -R www-data:www-data /var/www/html/bootstrap/cache \
+    && chmod -R 775 /var/www/html/bootstrap/cache
+
+# Comando para iniciar o servidor
+CMD ["apache2-foreground"]
+
+RUN php artisan key:generate

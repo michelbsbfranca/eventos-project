@@ -8,7 +8,16 @@ export default defineConfig({
                 'resources/css/app.css',
                 'resources/js/app.js',
             ],
-            refresh: true,
+            refresh: [
+                'resources/views/**',
+                'resources/js/**',
+                'resources/css/**',
+            ],
         }),
     ],
+    build: {
+        rollupOptions: {
+            external: ['**/*.blade.php'],
+        },
+    },
 });

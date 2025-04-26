@@ -58,10 +58,10 @@ class EventController extends Controller
         return redirect('/')->with('msg', 'Evento criado com sucesso!');
     }
 
-    public function delete($id)
+    public function destroy($id)
     {
-        $event = Event::findOrFail($id);
-        $event->delete();
+        $event = Event::findOrFail($id)->delete();
+        
         return redirect('/')->with('msg', 'Evento excluído com sucesso!');
     }
 

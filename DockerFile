@@ -36,6 +36,10 @@ RUN composer install --no-interaction --prefer-dist --optimize-autoloader \
     && php artisan cache:clear \
     && php artisan optimize:clear
 
+RUN composer require laravel/jetstream
+
+RUN php artisan jetstream:install livewire
+
 # Instala dependências do Node/Vite
 RUN npm install
 

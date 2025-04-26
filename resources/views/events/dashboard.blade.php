@@ -27,7 +27,12 @@
                     <td><a href="/events/{{ $event->id }}">{{ $event->title }}</a></td>
                     <td>0</td>
                     <td>{{ date('d/m/Y', strtotime($event->date)) }}</td>
-                    <td><a href="#" class="btn btn-primary btn-sm" style="margin-right:10px;">Editar</a><a href="#" class="btn btn-danger btn-sm" style="margin-right:10px;">Deletar</a>
+                    <td><a href="#" class="btn btn-primary btn-sm" style="margin-right:10px;">Editar</a>
+                        <form action="/events/{{ $event->id }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja deletar este evento?')">Deletar</button>
+                        </form>
                         
                 </tr>
             @endforeach

@@ -10,7 +10,7 @@
         @csrf
         <div class="mb-3">
             <label for="img">imagem do Evento:</label>
-            <input type="file" class="form-control-file" id="title" name="image">
+            <input type="file" class="form-control-file" id="title" name="image" required>
         </div>
 
         <div class="mb-3">
@@ -35,7 +35,7 @@
         <div class="form-group">
             <label class="form-group">Adicione itens de infraestrutura:</label>
             <div class="form-group">
-                <input type="checkbox" class="form-check-input" id="items" name="items[]" value="Cadeiras">Cadeiras
+                <input type="checkbox" class="form-check-input" id="items" name="items[]" value="Bares">Bares
             </div>
             <div class="form-group">
                 <input type="checkbox" class="form-check-input" id="items" name="items[]" value="OpenFood">OpenFood
@@ -46,6 +46,10 @@
             <div class="form-group">
                 <input type="checkbox" class="form-check-input" id="items" name="items[]" value="Brindes">Brindes
             </div>
+            <div class="form-group">
+                <input type="checkbox" class="form-check-input" id="items" name="items[]" value="Diversos">Diversos
+            </div>
+
             
         </div>
 
